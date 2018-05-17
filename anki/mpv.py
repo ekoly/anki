@@ -36,9 +36,20 @@ import threading
 import subprocess
 import inspect
 
-from distutils.spawn import find_executable
+# in ubuntu 18.04 this line causes an error
+#from distutils.spawn import find_executable
 from queue import Queue, Empty, Full
 
+# hack
+def find_executable(executable, path=None):
+    if not path:
+        path = os.environ['PATH']
+
+    for directory in path.split(':'):
+        if executable in os.listdir(directory):
+            return directory + '/' + executable
+
+    return None
 
 class MPVError(Exception):
     pass

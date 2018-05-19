@@ -47,7 +47,10 @@ def find_executable(executable, path=None):
 
     for directory in path.split(':'):
         if executable in os.listdir(directory):
-            return directory + '/' + executable
+            exec_path = directory + '/' + executable
+            st = os.stat(exec_path)
+            if st & stat.S_IXUSR: # is it executable
+                return exec_path
 
     return None
 
